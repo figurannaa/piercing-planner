@@ -1,71 +1,56 @@
-import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-// To allow for the camera to move around the scene
-// To allow for importing the .gltf file
-import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// Scene, Camera, and Renderer
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+const container = document.getElementById( 'container' );
 
-// Add Lighting
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(2, 2, 2).normalize();
-scene.add(light);
+let renderer, scene, camera;
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-scene.add(ambientLight);
+init();
 
-// Store reference to the loaded model
-let earModel;
+function init() {
 
-// Load the GLB file
-const loader = new GLTFLoader();
-loader.load(
-    'models/kinda_ear.glb', // Path to your file
-    (gltf) => {
-        earModel = gltf.scene; // Store the loaded model in the earModel variable
-        earModel.scale.set(0.7, 0.7, 0.7); // Scale the model
-        scene.add(earModel); // Add the model to the scene
-        console.log('Model loaded:', gltf);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setAnimationLoop( animate );
+    container.appendChild( renderer.domElement );
+
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera( 2, window.innerWidth / window.innerHeight, 1, 1000 );
+	camera.position.z = 120;
+
+    const controls = new OrbitControls( camera, renderer.domElement );
+	controls.minDistance = 50;
+	controls.maxDistance = 200;
+
+    scene.add( new THREE.AmbientLight( 0x666666 ) );
+
+    const dirLight1 = new THREE.DirectionalLight( 0xffddcc, 3 );
+    dirLight1.position.set( 1, 0.75, 0.5 );
+    scene.add( dirLight1 );
+
+    const dirLight2 = new THREE.DirectionalLight( 0xccccff, 3 );
+    dirLight2.position.set( - 1, 0.75, - 0.5 );
+    scene.add( dirLight2 );
+
+    loadEar();
+
+}
+
+function loadEar() {
+    const loader = new GLTFLoader();
+
+    loader.load( 'models/kinda_ear.glb', function ( gltf ) {
+        scene.add( gltf.scene );
     },
     undefined,
-    (error) => {
+    function ( error ) {
         console.error('Error loading the GLB file:', error);
-    }
-);
-
-// Mouse position
-const mouse = { x: 0, y: 0 };
-
-// Event listener for mouse movement
-window.addEventListener('mousemove', (event) => {
-    // Normalize mouse coordinates (-1 to +1 range)
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = (event.clientY / window.innerHeight) * 2 + 1;
-
-    // Rotate the ear model if it's loaded
-    if (earModel) {
-        earModel.rotation.y = mouse.x * Math.PI * 0.7; // Rotate horizontally (limited)
-        earModel.rotation.x = mouse.y * Math.PI * 0.7; // Rotate vertically (limited)
-    }
-});
-
-// Position the Camera
-camera.position.z = 2;
-
-// Render Loop
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
+    } );
 }
-animate();
 
-// Handle Window Resizing
-window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-});
+function animate() {
+	renderer.render( scene, camera );
+
+}
