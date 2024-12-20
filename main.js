@@ -18,7 +18,7 @@ function init() {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 2, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.z = 120;
+	camera.position.z = 100;
 
     const controls = new OrbitControls( camera, renderer.domElement );
 	controls.minDistance = 50;
@@ -41,8 +41,9 @@ function init() {
 function loadEar() {
     const loader = new GLTFLoader();
 
-    loader.load( 'models/kinda_ear.glb', function ( gltf ) {
+    loader.load( 'assets/models/ear/kinda_ear.glb', function ( gltf ) {
         scene.add( gltf.scene );
+        console.error('Ear model loaded successfully!');
     },
     undefined,
     function ( error ) {
