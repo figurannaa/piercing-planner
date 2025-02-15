@@ -1,6 +1,11 @@
 {
+  "scripts": {
+    "build": "vite build",
+    "deploy": "gh-pages -d dist"
+  },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "gh-pages": "^6.3.0",
     "three": "^0.171.0"
   },
   "devDependencies": {
