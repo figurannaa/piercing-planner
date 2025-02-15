@@ -13,7 +13,17 @@ button {
     cursor: crosshair;
 }
 
+a {
+    color: yellowgreen;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
 #info {
+    display: flex;
+    justify-content: center;         
     position: absolute;
 	top: 0px;
 	width: 100%;
@@ -24,12 +34,21 @@ button {
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	pointer-events: none;
 	z-index: 1; /* TODO Solve this in HTML */
+}
+
+#ears img {
+    width: 70px;                
+    height: auto;
+}
+
+#ears:hover img{
+    width: 90px;
 }
 
 #choices {
     justify-content: center;
+    text-align: center;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -46,6 +65,10 @@ button {
     padding: 10px;
     border-radius: 5px;
     border: rgb(255, 255, 255, 0.7) solid 2px;
+}
+
+#choice img{
+    width: 50px;
 }
 
 #choice:hover {
