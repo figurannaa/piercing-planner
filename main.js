@@ -41,7 +41,7 @@ function init() {
 function loadEar() {
     const loader = new GLTFLoader();
 
-    loader.load( '/models/testing_ear.glb', function ( gltf ) {
+    loader.load( 'testing_ear.glb', function ( gltf ) {
         scene.add( gltf.scene );
 
         console.error('Ear model loaded successfully!');
