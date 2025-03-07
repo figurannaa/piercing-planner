@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const container = document.getElementById( 'container' );
 
 let renderer, scene, camera;
+let testEar, leftEar;
 
 init();
 
@@ -38,18 +39,39 @@ function init() {
 
 }
 
+//
+// LOADING FUNCTIONS
+//
+
 function loadEar() {
     const loader = new GLTFLoader();
 
-    loader.load( 'testing_ear.glb', function ( gltf ) {
-        scene.add( gltf.scene );
+    const testTex = new THREE.TextureLoader().load('testing_ear.jpg');
+    testTex.colorSpace = THREE.SRGBColorSpace;
 
-        console.error('Ear model loaded successfully!');
+    loader.load('testing_ear.glb', function (gltf) {
+        testEar = gltf.scene;
+
+        testEar.material = new THREE.MeshBasicMaterial( { map: testTex } );
+
+        /*testEar.traverse((child) => {
+            if (child.isMesh) {
+                child.material.map = testTex;
+                child.material.needsUpdate = true;
+            }
+        });*/
+
+        // Setting the model's position, so it looks decent upon start up
+        testEar.scale.set(0.7, 0.7, 0.7); 
+        testEar.rotation.y = THREE.MathUtils.degToRad(210); 
+
+        scene.add(testEar);
+        console.log('Ear model loaded successfully!');
     },
     undefined,
-    function ( error ) {
+    function (error) {
         console.error('Error loading the GLTF file:', error);
-    } );
+    });
 }
 
 function animate() {
