@@ -37,15 +37,6 @@ a:hover{
 	z-index: 1; /* TODO Solve this in HTML */
 }
 
-#ears img {
-    width: 70px;                
-    height: auto;
-}
-
-#ears:hover img{
-    width: 90px;
-}
-
 #choices {
     justify-content: center;
     text-align: center;
