@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 const container = document.getElementById( 'container' );
 
 let renderer, scene, camera;
-let testEar;
+let testEar, leftEar;
 
 init();
 
@@ -39,6 +39,10 @@ function init() {
 
 }
 
+//
+// LOADING FUNCTIONS
+//
+
 function loadEar() {
     const loader = new GLTFLoader();
 
@@ -56,6 +60,10 @@ function loadEar() {
                 child.material.needsUpdate = true;
             }
         });*/
+
+        // Setting the model's position, so it looks decent upon start up
+        testEar.scale.set(0.7, 0.7, 0.7); 
+        testEar.rotation.y = THREE.MathUtils.degToRad(210); 
 
         scene.add(testEar);
         console.log('Ear model loaded successfully!');

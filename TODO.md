@@ -1,4 +1,3 @@
 # TODO list
-* Resize and rotate ears for proper load position
-* Implement mesh
+* Implement left and right ear next to each other
 * Create shooting line for PCs
