@@ -1,25 +1,28 @@
 import * as THREE from 'three';
+import { SphereGeometry } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { log } from 'three/tsl';
 
 const container = document.getElementById( 'container' );
 
 let renderer, scene, camera;
 
 let line;
-let rightEar,leftEar;
 let raycaster;
+
+let mouseHelper;
+const mouse = new THREE.Vector2();
 
 const intersection = {
     intersects: false,
     point: new THREE.Vector3(),
     normal: new THREE.Vector3()
 };
-const mouse = new THREE.Vector2();
 const intersects = [];
 
-let mouseHelper;
+const piercings = [];
+
+let rightEar,leftEar;
 
 init();
 
@@ -88,6 +91,8 @@ function init() {
         if ( moved === false ) {
 
             checkIntersection( event.clientX, event.clientY );
+
+            if ( intersection.intersects ) pierce();
 
         }
 
@@ -172,6 +177,30 @@ function loadEar() {
     function (error) {
         console.error('Error loading the GLTF file:', error);
     });
+}
+
+//
+// SHOOTING FUNCTION
+//
+function pierce() {
+    const sphereSize = 0.07;
+
+    const position = intersection.point.clone();
+    rightEar.worldToLocal(position);
+
+    const geometry = new THREE.SphereGeometry(sphereSize, 32, 32); 
+    const material = new THREE.MeshStandardMaterial({ 
+        color: 0xd3d3d3, 
+        metalness: 1,    
+        roughness: 0.2,  
+    });
+
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.copy(position);
+    sphere.renderOrder = piercings.length; 
+
+    piercings.push(sphere);
+    rightEar.add(sphere);
 }
 
 function onWindowResize() {
