@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "npm": "^11.2.0",
     "three": "^0.174.0"
   },
   "devDependencies": {

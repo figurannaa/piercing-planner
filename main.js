@@ -153,13 +153,13 @@ function init() {
 function loadEar() {
     const loader = new GLTFLoader();
 
-    const testTex = new THREE.TextureLoader().load('testing_ear.jpg');
-    testTex.colorSpace = THREE.SRGBColorSpace;
+    //const testTex = new THREE.TextureLoader().load('testing_ear.jpg');
+    //testTex.colorSpace = THREE.SRGBColorSpace;
 
     loader.load('testing_ear.glb', function (gltf) {
 
         rightEar = gltf.scene.children[0];
-        rightEar.material = new THREE.MeshBasicMaterial( { map: testTex } );
+        //rightEar.material = new THREE.MeshBasicMaterial( { map: testTex } );
 
         // Setting the model's position, so it looks decent upon start up
         rightEar.scale.set(0.7, 0.7, 0.7); 
