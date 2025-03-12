@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { SphereGeometry } from 'three';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { shininess } from 'three/tsl';
 
 const container = document.getElementById( 'container' );
 
@@ -23,6 +24,13 @@ const intersects = [];
 const piercings = [];
 
 let rightEar,leftEar;
+
+const params = {
+    color: 0xd3d3d3,
+    size: 0.08,
+    shininess: 0.2,
+    metalness: 1
+};
 
 init();
 
@@ -105,6 +113,8 @@ function init() {
         }
     }
 
+    document.getElementById('clear').addEventListener('click', removePiercings);
+
     //
     // CHECKING IF THE CURSOR IS INTERSECTING WITH THE OBJECT
     //
@@ -150,6 +160,17 @@ function init() {
         }
 
     }
+
+    //
+    // GUI
+    //
+    const gui = new GUI();
+
+    gui.add( params, 'size', 0.04, 0.2 );
+    gui.addColor( params, 'color');
+    gui.add( params, 'shininess', 0, 0.5);
+    gui.add( params, 'metalness', 0, 1);
+    gui.open();
 }
 
 //
@@ -180,19 +201,22 @@ function loadEar() {
 }
 
 //
-// SHOOTING FUNCTION
+// PIERCING FUNCTIONS
 //
 function pierce() {
-    const sphereSize = 0.07;
+    const sphereSize = params.size;
 
     const position = intersection.point.clone();
     rightEar.worldToLocal(position);
 
+    console.log(params.color);
+    
+
     const geometry = new THREE.SphereGeometry(sphereSize, 32, 32); 
     const material = new THREE.MeshStandardMaterial({ 
-        color: 0xd3d3d3, 
-        metalness: 1,    
-        roughness: 0.2,  
+        color: params.color, 
+        metalness: params.metalness,    
+        roughness: params.shininess,  
     });
 
     const sphere = new THREE.Mesh(geometry, material);
@@ -201,6 +225,14 @@ function pierce() {
 
     piercings.push(sphere);
     rightEar.add(sphere);
+}
+
+function removePiercings() {
+    piercings.forEach( function ( d ) {
+        rightEar.remove( d );
+    } );
+
+    piercings.length = 0;
 }
 
 function onWindowResize() {
