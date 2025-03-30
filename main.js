@@ -1,25 +1,35 @@
 import * as THREE from 'three';
+import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { log } from 'three/tsl';
 
 const container = document.getElementById( 'container' );
 
 let renderer, scene, camera;
 
 let line;
-let rightEar,leftEar;
 let raycaster;
+
+let mouseHelper;
+const mouse = new THREE.Vector2();
 
 const intersection = {
     intersects: false,
     point: new THREE.Vector3(),
     normal: new THREE.Vector3()
 };
-const mouse = new THREE.Vector2();
 const intersects = [];
 
-let mouseHelper;
+const piercings = [];
+
+let rightEar,leftEar;
+
+const params = {
+    color: 0xd3d3d3,
+    size: 0.08,
+    shininess: 0.2,
+    metalness: 1
+};
 
 init();
 
@@ -89,6 +99,8 @@ function init() {
 
             checkIntersection( event.clientX, event.clientY );
 
+            if ( intersection.intersects ) pierce();
+
         }
 
     } );
@@ -99,6 +111,8 @@ function init() {
             checkIntersection(event.clientX, event.clientY);
         }
     }
+
+    document.getElementById('clear').addEventListener('click', removePiercings);
 
     //
     // CHECKING IF THE CURSOR IS INTERSECTING WITH THE OBJECT
@@ -145,6 +159,17 @@ function init() {
         }
 
     }
+
+    //
+    // GUI
+    //
+    const gui = new GUI();
+
+    gui.add( params, 'size', 0.04, 0.2 );
+    gui.addColor( params, 'color');
+    gui.add( params, 'shininess', 0, 0.5);
+    gui.add( params, 'metalness', 0, 1);
+    gui.open();
 }
 
 //
@@ -174,8 +199,42 @@ function loadEar() {
     });
 }
 
-function onWindowResize() {
+//
+// PIERCING FUNCTIONS
+//
+function pierce() {
+    const sphereSize = params.size;
 
+    const position = intersection.point.clone();
+    rightEar.worldToLocal(position);
+
+    console.log(params.color);
+    
+
+    const geometry = new THREE.SphereGeometry(sphereSize, 32, 32); 
+    const material = new THREE.MeshStandardMaterial({ 
+        color: params.color, 
+        metalness: params.metalness,    
+        roughness: params.shininess,  
+    });
+
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.copy(position);
+    sphere.renderOrder = piercings.length; 
+
+    piercings.push(sphere);
+    rightEar.add(sphere);
+}
+
+function removePiercings() {
+    piercings.forEach( function ( d ) {
+        rightEar.remove( d );
+    } );
+
+    piercings.length = 0;
+}
+
+function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 

@@ -1,4 +1,4 @@
 # TODO list
 * Implement left and right ear next to each other
-* Fix ear shading - looks like a flat potato, depth should be added
+* Add Gui for resizing and coloring for sphere PC
 * Organize folder structer
