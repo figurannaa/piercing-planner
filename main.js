@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { shininess } from 'three/tsl';
 
 const container = document.getElementById( 'container' );
 
