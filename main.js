@@ -112,6 +112,8 @@ function init() {
         }
     }
 
+    
+    document.getElementById('undo').addEventListener('click', undoLastPC);
     document.getElementById('clear').addEventListener('click', removePiercings);
 
     //
@@ -224,6 +226,13 @@ function pierce() {
 
     piercings.push(sphere);
     rightEar.add(sphere);
+}
+
+function undoLastPC() {
+    const last = piercings.pop();
+    if (last) {
+        rightEar.remove(last);
+    }
 }
 
 function removePiercings() {

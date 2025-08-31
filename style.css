@@ -23,7 +23,9 @@ a:hover{
 
 #info {
     display: flex;
-    justify-content: center;         
+    justify-content: center;
+    align-items: center;  
+    gap: 10px;
     position: absolute;
 	top: 0px;
 	width: 100%;
@@ -35,6 +37,10 @@ a:hover{
 	-ms-user-select: none;
 	user-select: none;
 	z-index: 1; /* TODO Solve this in HTML */
+}
+
+#info a {
+    font-size: 20px;
 }
 
 #choices {
