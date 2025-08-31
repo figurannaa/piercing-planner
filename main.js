@@ -226,6 +226,10 @@ function pierce() {
     rightEar.add(sphere);
 }
 
+function undoLastPC() {
+    piercings.pop();
+}
+
 function removePiercings() {
     piercings.forEach( function ( d ) {
         rightEar.remove( d );
